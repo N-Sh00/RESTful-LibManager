@@ -22,8 +22,10 @@ public class BookService {
         return bookRepo.findById(id);
     }
 
-    public void createBook (Book book){
+    public Book createBook (Book book){
+        book.setAvailable(true);
        bookRepo.save(book);
+        return book;
     }
 
     public void deleteBook(Long id){

@@ -1,9 +1,6 @@
 package com.Paisley.LibManager.LibEntity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Book {
@@ -11,8 +8,9 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String name;
-    private String author;
+    private boolean isAvailable = true;
 
     public String getName() {
         return name;
@@ -30,13 +28,12 @@ public class Book {
         this.id = id;
     }
 
-    public String getAuthor() {
-        return author;
+
+    public boolean isAvailable() {
+        return isAvailable;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setAvailable(boolean available) {
+        isAvailable = available;
     }
-
-
 }
