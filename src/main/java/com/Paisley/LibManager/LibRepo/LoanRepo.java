@@ -1,9 +1,10 @@
 package com.Paisley.LibManager.LibRepo;
 
 import com.Paisley.LibManager.LibEntity.Book;
+import com.Paisley.LibManager.LibEntity.Loan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface LoanRepo extends JpaRepository<Book, Long> {
+public interface LoanRepo extends JpaRepository<Loan, Long> {
 }

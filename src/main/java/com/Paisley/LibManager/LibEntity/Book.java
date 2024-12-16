@@ -12,6 +12,10 @@ public class Book {
     private String name;
     private boolean isAvailable = true;
 
+    @ManyToOne
+    @JoinColumn(name = "borrowed_by_id", nullable = true)
+    private Member borrowedBy;
+
     public String getName() {
         return name;
     }
@@ -35,5 +39,13 @@ public class Book {
 
     public void setAvailable(boolean available) {
         isAvailable = available;
+    }
+
+    public Member getBorrowedBy() {
+        return borrowedBy;
+    }
+
+    public void setBorrowedBy(Member borrowedBy) {
+        this.borrowedBy = borrowedBy;
     }
 }

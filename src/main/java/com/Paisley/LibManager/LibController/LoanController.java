@@ -5,22 +5,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
-//@RequestMapping("/api/loans")
+@RequestMapping("/api/loans")
 public class LoanController {
 
     @Autowired
     LoanService loanService;
 
-    @PostMapping("/api/loans/borrow/{id}/{bookId}")
-    public ResponseEntity<String> borrowBook(@PathVariable (value = "id") Long userId, @PathVariable (value = "bookId") Long bookId){
+    @PostMapping
+    public ResponseEntity<String> borrowBook(@RequestBody Map<String, Object> data) {
+        Long userId = Long.valueOf(data.get("userId").toString());
+        Long bookId = Long.valueOf(data.get("bookId").toString());
         String response = loanService.borrowBook(userId, bookId);
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/api/loans/return/{id}/{bookId}")
-    public ResponseEntity<String> returnBook(@PathVariable (value = "id") Long userId, @PathVariable (value = "bookId") Long bookId)
-    {
+    @DeleteMapping
+    public ResponseEntity<String> returnBook(@RequestBody Map<String, Object> data) {
+        Long userId = Long.valueOf(data.get("userId").toString());
+        Long bookId = Long.valueOf(data.get("bookId").toString());
         String response = loanService.returnBook(userId, bookId);
         return ResponseEntity.ok(response);
     }

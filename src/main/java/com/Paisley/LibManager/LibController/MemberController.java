@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/members")
 public class MemberController {
     // Implement CRUD operations for User
     // Use UserService to interact with UserRep
@@ -22,7 +22,7 @@ public class MemberController {
     }
 
     @GetMapping("api/members/{id}")
-    public Member getUserById(@RequestParam (value = "id") Long id) {
+    public Member getUserById(@PathVariable (value = "id") Long id) {
         return memberService.getMember(id).orElse(null);
     }
 
@@ -32,8 +32,8 @@ public class MemberController {
         return ResponseEntity.ok(savedMember);
     }
 
-    @DeleteMapping("/api/users{id}")
-    public void deleteUser(@RequestParam(value = "id") Long id) {
+    @DeleteMapping("/api/members/{id}")
+    public void deleteUser(@PathVariable (value = "id") Long id) {
         memberService.deleteMember(id);
     }
 }

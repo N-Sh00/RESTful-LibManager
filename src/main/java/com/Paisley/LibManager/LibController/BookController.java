@@ -23,7 +23,7 @@ public class BookController {
         return bookService.getBook(id).orElse(null);
     }
 
-    @PostMapping("/api/books/create")
+    @PostMapping("/api/books")
     public ResponseEntity<Book> createBook(@RequestBody Book book) {
         Book createdBook = bookService.createBook(book);
         return ResponseEntity.ok(createdBook);
