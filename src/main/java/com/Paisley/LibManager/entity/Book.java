@@ -1,6 +1,9 @@
-package com.Paisley.LibManager.LibEntity;
+package com.Paisley.LibManager.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+
+import java.util.*;
 
 @Entity
 public class Book {
@@ -14,7 +17,12 @@ public class Book {
 
     @ManyToOne
     @JoinColumn(name = "borrowed_by_id", nullable = true)
+    @JsonBackReference
     private Member borrowedBy;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
+
 
     public String getName() {
         return name;
@@ -48,4 +56,5 @@ public class Book {
     public void setBorrowedBy(Member borrowedBy) {
         this.borrowedBy = borrowedBy;
     }
+
 }

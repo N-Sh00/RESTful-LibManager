@@ -1,8 +1,10 @@
-package com.Paisley.LibManager.LibService;
+package com.Paisley.LibManager.service;
 
-import com.Paisley.LibManager.LibEntity.Member;
-import com.Paisley.LibManager.LibRepo.MemberRepo;
+import com.Paisley.LibManager.entity.Member;
+import com.Paisley.LibManager.repository.MemberRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +16,8 @@ public class MemberService {
     @Autowired
     MemberRepo memberRepo;
 
-    public List<Member> getAllMembers() {
-        return memberRepo.findAll();
+    public Page<Member> getAllMembers(Pageable pageable) {
+        return memberRepo.findAll(pageable);
     }
 
     public Optional<Member> getMember(Long id) {

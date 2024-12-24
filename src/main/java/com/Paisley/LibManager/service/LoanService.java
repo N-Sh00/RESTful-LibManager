@@ -1,11 +1,11 @@
-package com.Paisley.LibManager.LibService;
+package com.Paisley.LibManager.service;
 
-import com.Paisley.LibManager.LibEntity.Book;
-import com.Paisley.LibManager.LibEntity.Loan;
-import com.Paisley.LibManager.LibEntity.Member;
-import com.Paisley.LibManager.LibRepo.BookRepo;
-import com.Paisley.LibManager.LibRepo.LoanRepo;
-import com.Paisley.LibManager.LibRepo.MemberRepo;
+import com.Paisley.LibManager.entity.Book;
+import com.Paisley.LibManager.entity.Loan;
+import com.Paisley.LibManager.entity.Member;
+import com.Paisley.LibManager.repository.BookRepo;
+import com.Paisley.LibManager.repository.LoanRepo;
+import com.Paisley.LibManager.repository.MemberRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +53,8 @@ public String borrowBook (Long userId, Long bookId) {
     loan.setStartDate(LocalDate.now());
     loan.setDueDate(loan.getStartDate().plusDays(10));
     loanRepo.save(loan);
+
+
 
 
     return "Book borrowed successfully";

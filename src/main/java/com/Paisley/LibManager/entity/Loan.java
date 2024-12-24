@@ -1,4 +1,4 @@
-package com.Paisley.LibManager.LibEntity;
+package com.Paisley.LibManager.entity;
 
 import jakarta.persistence.*;
 

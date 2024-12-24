@@ -1,5 +1,6 @@
-package com.Paisley.LibManager.LibEntity;
+package com.Paisley.LibManager.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class Member {
     private Integer booksBorrowed = 0;
 
     @OneToMany(mappedBy = "borrowedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Book> borrowedBooks;
 
     public String getName() {
