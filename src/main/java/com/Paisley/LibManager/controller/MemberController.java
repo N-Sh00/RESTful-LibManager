@@ -10,7 +10,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/members")
@@ -23,25 +25,50 @@ public class MemberController {
     private static final int ITEMS_PER_PAGE = 10;
 
     @GetMapping
-    public Page<Member> getAllUsers(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Page<Member>> getAllUsers(@RequestParam(defaultValue = "0") int page,
                                     @RequestParam(defaultValue = "name") String sort) {
-        Pageable pageable = PageRequest.of(page,ITEMS_PER_PAGE, Sort.by(sort));
-        return memberService.getAllMembers(pageable);
+        Pageable pageable = PageRequest.of(page, ITEMS_PER_PAGE, Sort.by(sort));
+        Page<Member> members = memberService.getAllMembers(pageable);
+
+        if (members.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(members);
     }
 
-    @GetMapping("api/members/{id}")
-    public Member getUserById(@PathVariable (value = "id") Long id) {
-        return memberService.getMember(id).orElse(null);
+    @GetMapping("/{id}")
+    public ResponseEntity<Member> getUserById(@PathVariable Long id) {
+        Optional<Member> member = memberService.getMember(id);
+        if (member.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(member.get());
     }
 
-    @PostMapping("/api/members")
+    @PostMapping("/members")
     public ResponseEntity<Member> addMember(@RequestBody Member member) {
         Member savedMember = memberService.createMember(member);
-        return ResponseEntity.ok(savedMember);
+        URI location = URI.create(String.format("api/members/%d", savedMember.getId()));
+        return ResponseEntity.created(location).body(savedMember);
     }
 
-    @DeleteMapping("/api/members/{id}")
-    public void deleteUser(@PathVariable (value = "id") Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         memberService.deleteMember(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Member> updateMember(@PathVariable Long id, @RequestBody Member updatedMember) {
+        Optional<Member> existingMember = memberService.getMember(id);
+        if (existingMember.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Member member = existingMember.get();
+        member.setName(updatedMember.getName());
+
+        Member savedMember = memberService.updateMember(member);
+        return ResponseEntity.ok(savedMember);
     }
 }

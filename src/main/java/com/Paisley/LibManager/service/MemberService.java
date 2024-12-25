@@ -33,4 +33,8 @@ public class MemberService {
     public void deleteMember(Long id) {
         memberRepo.deleteById(id);
     }
+
+    public Member updateMember(Member member) {
+        return memberRepo.save(member);
+    }
 }

@@ -29,11 +29,11 @@ public class Loan {
     }
 
 
-    public Member getUser() {
+    public Member getMember() {
         return member;
     }
 
-    public void setUser(Member member) {
+    public void setMember(Member member) {
         this.member = member;
     }
 

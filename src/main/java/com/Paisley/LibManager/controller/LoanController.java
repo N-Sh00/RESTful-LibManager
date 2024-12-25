@@ -1,5 +1,6 @@
 package com.Paisley.LibManager.controller;
 
+import com.Paisley.LibManager.entity.Loan;
 import com.Paisley.LibManager.service.LoanService;
 import com.Paisley.LibManager.dto.LoanEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ public class LoanController {
 
     @PostMapping
     public ResponseEntity<String> borrowBook(@RequestBody LoanEntity loanEntity) {
-
         String response = loanService.borrowBook(loanEntity.getUserId(), loanEntity.getBookId());
         return ResponseEntity.ok(response);
     }

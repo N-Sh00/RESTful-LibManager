@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -26,6 +27,10 @@ public class BookController {
         Pageable pageable = PageRequest.of(page,ITEMS_PER_PAGE);
         Page<BookDTO> books = bookService.getAllBooks(pageable);
 
+        if (books.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
         return ResponseEntity.ok(books);
     }
 
@@ -41,12 +46,14 @@ public class BookController {
     @PostMapping
     public ResponseEntity<BookDTO> createBook(@RequestBody UpdateBookDTO updateBookDTO) {
         BookDTO createdBook = bookService.createBook(updateBookDTO);
-        return ResponseEntity.ok(createdBook);
+        URI location = URI.create(String.format("/api/books/%d", createdBook.getId()));
+        return ResponseEntity.created(location).body(createdBook);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBook(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")

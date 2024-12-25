@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class LoanService {
@@ -36,6 +37,17 @@ public String borrowBook (Long userId, Long bookId) {
         return "Book already borrowed";
     }
 
+    List<Loan> allLoans = loanRepo.findAll();
+    int activeLoanCount = 0;
+    for (Loan loan : allLoans) {
+        if (loan.getMember().getId().equals(userId) && loan.getReturnDate() == null) {
+            activeLoanCount++;
+        }
+    }
+    if (activeLoanCount >= borrowLimit) {
+        throw new IllegalArgumentException("Borrow limit reached for this member");
+    }
+
     if (member.getBorrowedBooks().size() >= member.getBorrowLimit()) {
         return "Borrow limit reached. Return a book to borrow a new one.";
     }
@@ -48,19 +60,18 @@ public String borrowBook (Long userId, Long bookId) {
     memberRepo.save(member);
 
     Loan loan = new Loan();
-    loan.setUser(member);
+    loan.setMember(member);
     loan.setBook(book);
     loan.setStartDate(LocalDate.now());
     loan.setDueDate(loan.getStartDate().plusDays(10));
     loanRepo.save(loan);
 
-
-
-
     return "Book borrowed successfully";
 }
 
 public String returnBook (Long userId, Long bookId) {
+
+
 
     Member member = memberRepo.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("User not found"));
