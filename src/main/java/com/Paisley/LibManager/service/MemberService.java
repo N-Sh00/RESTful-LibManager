@@ -5,6 +5,7 @@ import com.Paisley.LibManager.repository.MemberRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +25,11 @@ public class MemberService {
         return memberRepo.findById(id);
     }
 
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+
     public Member createMember(Member member){
+        member.setPassword(encoder.encode(member.getPassword()));
+        System.out.println(member.getPassword());
         memberRepo.save(member);
         return member;
     }
@@ -37,4 +42,7 @@ public class MemberService {
     public Member updateMember(Member member) {
         return memberRepo.save(member);
     }
+
+
+
 }
