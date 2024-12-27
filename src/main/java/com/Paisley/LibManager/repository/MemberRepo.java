@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MemberRepo extends JpaRepository<Member, Long> {
     @Override
     Page<Member> findAll(Pageable pageable);
+
+    Member findByUsername(String username);
 }

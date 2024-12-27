@@ -45,7 +45,7 @@ public class MemberController {
         return ResponseEntity.ok(member.get());
     }
 
-    @PostMapping("/members")
+    @PostMapping()
     public ResponseEntity<Member> addMember(@RequestBody Member member) {
         Member savedMember = memberService.createMember(member);
         URI location = URI.create(String.format("api/members/%d", savedMember.getId()));
