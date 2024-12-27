@@ -1,5 +1,6 @@
 package com.Paisley.LibManager.controller;
 
+import com.Paisley.LibManager.dto.MemberDTO;
 import com.Paisley.LibManager.entity.Member;
 import com.Paisley.LibManager.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +46,15 @@ public class MemberController {
         return ResponseEntity.ok(member.get());
     }
 
-    @PostMapping()
-    public ResponseEntity<Member> addMember(@RequestBody Member member) {
+    @PostMapping("/register")
+    public ResponseEntity<Member> addMember(@RequestBody MemberDTO memberDTO) {
+        Member member = new Member();
+        member.setName(memberDTO.getName());
+        member.setUsername(memberDTO.getUsername());
+        member.setPassword(memberDTO.getPassword());
+
         Member savedMember = memberService.createMember(member);
-        URI location = URI.create(String.format("api/members/%d", savedMember.getId()));
+        URI location = URI.create(String.format("api/members/" + savedMember.getId()));
         return ResponseEntity.created(location).body(savedMember);
     }
 
