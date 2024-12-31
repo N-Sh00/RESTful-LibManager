@@ -2,6 +2,7 @@ package com.Paisley.LibManager.controller;
 
 import com.Paisley.LibManager.dto.MemberDTO;
 import com.Paisley.LibManager.entity.Member;
+import com.Paisley.LibManager.service.JwtService;
 import com.Paisley.LibManager.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,6 +10,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -22,6 +26,12 @@ public class MemberController {
     // Use UserService to interact with UserRep
     @Autowired
     MemberService memberService;
+
+    @Autowired
+    JwtService jwtService;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
 
     private static final int ITEMS_PER_PAGE = 10;
 
@@ -56,6 +66,17 @@ public class MemberController {
         Member savedMember = memberService.createMember(member);
         URI location = URI.create(String.format("api/members/" + savedMember.getId()));
         return ResponseEntity.created(location).body(savedMember);
+    }
+
+    @PostMapping("login")
+    public String login(@RequestBody MemberDTO memberDTO) {
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(memberDTO.getUsername(), memberDTO.getPassword()));
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(memberDTO.getUsername());
+        }
+        else
+            return "Loggin failed";
     }
 
     @DeleteMapping("/{id}")
